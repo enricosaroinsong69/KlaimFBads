@@ -1,0 +1,97 @@
+PANDUAN IPHONE — LAPORAN ACTIVITY MARKETING
+===========================================
+
+Aplikasi ini berjalan penuh di iPhone: mengisi formulir, mengunggah foto,
+membuat PDF A4, mencetak lewat AirPrint, dan membagikannya ke WhatsApp.
+
+Yang TIDAK bisa: memasang berkas APK. APK hanya untuk Android. Di iPhone
+aplikasinya dipasang sebagai aplikasi web, caranya di bawah ini.
+
+
+LANGKAH 1 — Taruh aplikasinya di sebuah alamat https
+----------------------------------------------------
+iPhone hanya mau menyimpan data dan memasang ikon kalau aplikasinya dibuka
+lewat alamat https, bukan dari berkas di dalam HP. Jadi isi folder
+"klaim-fb-ads" perlu diunggah dulu ke hosting statis gratis.
+
+Cara paling cepat — Netlify Drop (tanpa daftar akun):
+  1. Buka https://app.netlify.com/drop di komputer.
+  2. Seret seluruh FOLDER "klaim-fb-ads" ke halaman itu.
+  3. Anda langsung dapat alamat, misalnya https://nama-acak.netlify.app
+  4. Simpan alamat itu, lalu buka di iPhone.
+
+Alternatif — GitHub Pages (kalau ingin alamat tetap):
+  1. Buat repository baru di github.com, centang "Public".
+  2. Unggah semua isi folder klaim-fb-ads (bukan foldernya, isinya).
+  3. Settings -> Pages -> Source: Deploy from a branch -> main -> / (root).
+  4. Tunggu beberapa menit, alamatnya muncul di halaman itu juga.
+
+
+LANGKAH 2 — Pasang ke layar utama iPhone
+-----------------------------------------
+  1. Buka alamat tadi di SAFARI (harus Safari, bukan Chrome).
+  2. Ketuk tombol Bagikan (kotak dengan panah ke atas) di bawah layar.
+  3. Gulir ke bawah, pilih "Tambahkan ke Layar Utama".
+  4. Beri nama, ketuk Tambah.
+
+Ikon "Laporan Activity" akan muncul di layar utama dan terbuka tanpa bilah
+alamat, juga saat tidak ada internet.
+
+
+LANGKAH 3 — Mencetak dan berbagi
+---------------------------------
+Ada tiga tombol di tab Cetak:
+
+  Simpan PDF ..... Membuat berkas PDF A4 asli, margin 0,5 cm, lalu membuka
+                   lembar berbagi iPhone. Dari situ Anda bisa memilih:
+                     - "Cetak" untuk AirPrint ke Epson L3250
+                     - "Simpan ke File" untuk menyimpan PDF-nya
+                     - WhatsApp, Mail, dan aplikasi lain
+                   INI CARA YANG PALING DIANJURKAN DI IPHONE.
+
+  Cetak .......... Layanan cetak bawaan. Berfungsi kalau aplikasi dibuka
+                   lewat Safari. Kalau dibuka dari ikon layar utama, tombol
+                   ini tidak berfungsi — itu batasan iOS, bukan aplikasinya.
+                   Pakai Simpan PDF sebagai gantinya.
+
+  Bagikan JPG .... Mengirim tiap halaman sebagai gambar. Praktis untuk
+                   WhatsApp karena langsung tampil sebagai foto.
+
+
+LANGKAH 4 — Printer
+--------------------
+  Epson L3250 : ada Wi-Fi dan mendukung AirPrint. Sambungkan iPhone ke Wi-Fi
+                yang sama, lalu pilih printernya di layar Cetak. Pastikan
+                ukuran kertas A4.
+  Epson L3210 : hanya USB, tidak bisa dari iPhone. Pakai Simpan PDF, kirim
+                berkasnya ke komputer, lalu cetak dari sana.
+
+
+PENTING — CADANGKAN DATANYA
+----------------------------
+iPhone bisa menghapus sendiri data aplikasi web yang lama tidak dibuka.
+Karena itu, biasakan menekan "Unduh backup ZIP" di tab Data setiap selesai
+satu periode laporan, lalu simpan berkasnya ke iCloud Drive atau kirim ke
+diri sendiri lewat WhatsApp.
+
+Jangan memakai mode Penjelajahan Pribadi (Private Browsing) — di mode itu
+Safari menolak menyimpan apa pun, dan isian Anda akan hilang saat ditutup.
+
+
+KALAU ADA MASALAH
+------------------
+"Tambahkan ke Layar Utama" tidak ada
+  Anda sedang memakai Chrome atau Firefox. Buka alamatnya di Safari.
+
+Isian hilang setelah aplikasi ditutup
+  Aplikasi dibuka dari berkas, bukan dari alamat https. Ulangi Langkah 1.
+  Atau Safari sedang dalam mode Penjelajahan Pribadi.
+
+Tombol Simpan PDF memberi pesan "peramban ini tidak bisa mengubah halaman
+jadi gambar"
+  Versi Safari di HP itu terlalu lama. Perbarui iOS-nya, atau pakai tombol
+  Cetak dari Safari.
+
+Layar ikut membesar saat mengetuk kolom isian
+  Seharusnya tidak terjadi — huruf isian sudah disetel 16px khusus iPhone.
+  Kalau tetap terjadi, kabari saya.

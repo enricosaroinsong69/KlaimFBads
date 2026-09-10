@@ -1,0 +1,38 @@
+FORMULIR KLAIM DIGITAL MARKETING — D745 TOMOHON
+===============================================
+
+ISI FOLDER
+  index.html ............ aplikasinya
+  manifest.webmanifest .. supaya bisa dipasang sebagai aplikasi
+  sw.js ................. supaya tetap jalan tanpa internet
+  icon-*.png ............ ikon aplikasi
+
+CARA PAKAI CEPAT (tanpa hosting)
+  Buka index.html lewat peramban di HP atau komputer.
+  Semua fitur jalan, termasuk Cetak / PDF.
+  Catatan: kalau dibuka langsung dari penyimpanan HP, sebagian
+  peramban tidak menyimpan isian setelah aplikasi ditutup.
+
+CARA PASANG DI LAYAR UTAMA (perlu alamat https://)
+  1. Unggah SELURUH isi folder ini ke hosting statis gratis,
+     misalnya GitHub Pages atau Netlify Drop.
+  2. Buka alamat https://... yang diberikan.
+  3. Android/Chrome : menu titik tiga -> Tambahkan ke Layar utama
+     iPhone/Safari   : tombol Bagikan -> Tambahkan ke Layar Utama
+
+PENGATURAN SAAT MENCETAK
+  Ukuran kertas         : A4
+  Skala                 : 100% (jangan "Fit to page")
+  Margin                : Default (halaman sudah diatur 0,5 cm)
+  Grafik latar belakang : dicentang, supaya garis merah ikut tercetak
+
+PRINTER
+  Epson L3250 : ada Wi-Fi. Sambungkan HP ke Wi-Fi yang sama, lalu
+                cetak lewat Epson Smart Panel / Mopria (Android)
+                atau AirPrint (iPhone).
+  Epson L3210 : hanya USB. Simpan sebagai PDF dulu, lalu cetak dari
+                komputer yang tersambung ke printer.
+
+CADANGAN
+  Tab "Data sales" -> Simpan cadangan. Berkas .json berisi seluruh
+  isian dan foto. Lakukan sebelum ganti HP atau bersihkan data peramban.
