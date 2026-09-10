@@ -214,11 +214,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
 .anote div{margin-bottom:1.1mm}
 .atempat{text-align:center;margin:3.4mm 0 3.2mm}
 .attd{display:flex;gap:9%;align-items:flex-start}
+.attd table{table-layout:fixed}
 .attd table{border-collapse:collapse;font-size:1em}
 .attd td{border:.7pt solid #000;text-align:center;padding:.55mm 1mm}
-.attd .kiri{width:55.3%}
-.attd .kanan{width:35.7%}
+.attd .kiri{width:54.6%}
+.attd .kanan{width:36.4%}
 .attd .sp{height:18mm;vertical-align:bottom}
+/* Baris nama diberi tinggi tetap supaya kedua kotak tetap sejajar
+   walaupun ada nama yang terpaksa turun ke baris kedua. */
+.attd tr:last-child td{height:8mm;vertical-align:middle;line-height:1.15}
 .aphoto{padding:0}
 .aphoto h2{text-align:center;font-size:1.25em;font-weight:bold;margin:0 0 3mm}
 .agrid{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
@@ -309,8 +313,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
   <h1>Laporan Activity Marketing</h1>
   <p id="sub">Formulir cabang</p>
   <nav class="tabs" id="tabs">
-    <button data-t="lap" class="on">Laporan</button>
-    <button data-t="act">Activity Offline</button>
+    <button data-t="act" class="on">Activity Offline</button>
     <button data-t="klaim">Klaim FB Ads</button>
     <button data-t="pv">Cetak</button>
     <button data-t="set">Data</button>
@@ -380,82 +383,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
   </div>
 </section>
 
-<!-- ═══════ LAPORAN ═══════ -->
-<section class="panel on" id="p-lap">
-  <div class="card">
-    <h2>Identitas laporan</h2>
-    <div class="cb">
-      <label class="f"><span>Judul</span><input type="text" id="lJudul"></label>
-      <div class="row" style="margin:-6px 0 13px">
-        <button class="btn sm" id="lJudulAuto">Isi otomatis bulan ini</button>
-      </div>
-      <label class="f"><span>Cabang / dealer</span><select id="lCabang"></select></label>
-      <div class="row" style="margin:-6px 0 13px">
-        <button class="btn sm" id="lCabangAdd">+ Tambah cabang</button>
-        <button class="btn sm danger" id="lCabangDel">Hapus cabang ini</button>
-      </div>
-      <label class="f"><span>PIC</span><input type="text" id="lPic" list="salesHint"><datalist id="salesHint"></datalist></label>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Latar belakang &amp; tujuan kegiatan</h2>
-    <div class="cb">
-      <p class="hint">Nomor urut ditambahkan otomatis saat dicetak.</p>
-      <div id="lLatar"></div>
-      <button class="btn sm nav" id="lLatarAdd">+ Tambah poin</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Kegiatan &amp; sasaran</h2>
-    <div class="cb">
-      <label class="f"><span>Kegiatan / event</span><input type="text" id="lKegiatan"></label>
-      <div class="two">
-        <label class="f"><span>Tanggal dari</span><input type="date" id="lTgl1"></label>
-        <label class="f"><span>Sampai tanggal</span><input type="date" id="lTgl2"></label>
-      </div>
-      <label class="f"><span>Area target</span><input type="text" id="lArea"></label>
-      <label class="f"><span>Actual reach (orang)</span>
-        <input type="tel" id="lReach" inputmode="numeric" placeholder="3.000"></label>
-      <label class="f"><span>Segmentation</span><textarea id="lSegmen"></textarea></label>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Target &amp; aktual per tipe</h2>
-    <div class="cb">
-      <p class="hint">Kotak yang dikosongkan akan tercetak kosong, sama seperti contoh.</p>
-      <table class="gtbl">
-        <thead>
-          <tr><th rowspan="2" style="text-align:left;padding-left:8px">Tipe</th><th colspan="2">Target</th><th colspan="2">Aktual</th></tr>
-          <tr><th>SPK</th><th>DO</th><th>SPK</th><th>DO</th></tr>
-        </thead>
-        <tbody id="lTipe"></tbody>
-        <tfoot><tr><td class="nm">Total</td><td id="tTS">0</td><td id="tTD">0</td><td id="tAS">0</td><td id="tAD">0</td></tr></tfoot>
-      </table>
-      <label class="f" style="margin-top:13px"><span>Unit promosi</span><input type="text" id="lUnit"></label>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>Rincian biaya</h2>
-    <div class="cb">
-      <p class="hint">Geser tabel ke kiri untuk melihat kolom aktual.</p>
-      <div id="lBiaya"></div>
-      <div class="row" style="margin-top:4px">
-        <button class="btn sm nav" id="lBiayaAdd">+ Tambah baris</button>
-        <button class="btn sm" id="lBiayaSales">Isi dari daftar sales</button>
-      </div>
-      <div class="btot"><span>TOTAL</span><span id="lBiayaTot">Rp0 / Rp0</span></div>
-    </div>
-  </div>
-
-</section>
-
-
 <!-- ═══════ PENYELESAIAN ACTIVITY ═══════ -->
-<section class="panel" id="p-act">
+<section class="panel on" id="p-act">
   <div class="card">
     <h2>Kepala surat</h2>
     <div class="cb">
@@ -528,12 +457,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
     <div class="cb" style="padding-top:6px">
       <label class="f" style="margin-bottom:9px"><span>Halaman</span>
         <select id="fScope">
-          <option value="lap">Halaman laporan saja</option>
           <option value="act">Penyelesaian activity offline</option>
           <option value="one">Klaim — formulir yang sedang diisi</option>
           <option value="all">Klaim — semua halaman tersimpan</option>
-          <option value="both">Laporan + semua halaman klaim</option>
-          <option value="semua">Semua halaman (laporan, activity, klaim)</option>
+          <option value="semua">Activity offline + semua halaman klaim</option>
         </select></label>
       <div class="row">
         <button class="btn nav block" id="btnPv">Perbarui pratinjau</button>
@@ -688,8 +615,6 @@ var BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus',
 var TIPE_URUT = ['ROCKY','TERIOS','GMPU','GMMB','GMBV','SIRION','LUXIO','SIGRA','AYLA','XENIA'];
 var PERAN = [['pic','PIC'],['ss','SS / SALES SUPERVISOR'],['admin','ADMIN'],
              ['kacab','KEPALA CABANG'],['adh','ADH']];
-/* Blok tanda tangan halaman laporan hanya memakai empat peran ini. */
-var PERAN_LAPORAN = ['pic','ss','kacab','adh'];
 
 /* iPhone/iPad perlu huruf isian minimal 16px supaya layar tidak ikut membesar. */
 if(/iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -706,25 +631,6 @@ function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString
 function blankKlaim(){
   return {id:uid(), judul:'', sales:'', akun:'', nominal:'', tanggal:'',
           foto:{va:'',topup:'',konten:'',kinerja:'',demografi:''}};
-}
-function blankLaporan(){
-  var d = new Date();
-  return {
-    judul:'LAPORAN DIGITAL MARKETING BULAN '+BULAN[d.getMonth()].toUpperCase()+' '+d.getFullYear(),
-    cabang:'',
-    pic:'KRISNI JACKY ENRIKO SAROINSONG',
-    latar:[
-      'Mencapai target SPK dan Penjualan cabang dengan memanfaatkan activity online.',
-      'Membangun product image DAIHATSU di wilayah kerja cabang melalui promosi digital.'
-    ],
-    kegiatan:'DIGITAL MARKETING',
-    tgl1:'', tgl2:'',
-    area:'', reach:'',
-    segmen:'PNS, KARYAWAN, WIRASWASTA\nUMUR 25-60',
-    tipe: TIPE_URUT.map(function(t){ return {nama:t, tSpk:'', tDo:'', aSpk:'', aDo:''}; }),
-    unit:'LCGC, PU',
-    biaya: [{uraian:'FB ADS - ', budget:'', aktual:''}]
-  };
 }
 /* Nama penanda tangan disimpan sekali untuk semua laporan, diubah di tab Data. */
 function pejabatAwal(){
@@ -751,11 +657,9 @@ function blankActivity(){
 
 var db = {
   sales: salinDaftarAwal(),
-  cabang: [],
   judulHist: [],
   saved: [],
   current: blankKlaim(),
-  laporan: blankLaporan(),
   activity: blankActivity(),
   pejabat: pejabatAwal(),
   scope: 'lap'
@@ -886,7 +790,6 @@ function renderSalesOptions(){
     db.sales.map(function(s){ return '<option value="'+esc(s.nama)+'">'+esc(s.nama)+'</option>'; }).join('')+
     '<option value="__baru__">+ Tambah sales baru…</option>';
   sel.value=db.current.sales||'';
-  $('#salesHint').innerHTML=db.sales.map(function(s){ return '<option value="'+esc(s.nama)+'">'; }).join('');
 }
 function tambahSales(){
   var nama=prompt('Nama sales:'); if(!nama) return null;
@@ -924,7 +827,7 @@ $('#fNominal').addEventListener('input', function(e){
 $('#fTanggal').addEventListener('change', function(e){ db.current.tanggal=e.target.value; persist(); });
 $('#judulAuto').onclick=function(){
   var d=new Date();
-  var cab=(L().cabang||'').trim();
+  var cab=(A().cabang||'').trim();
   var j='Claim Digital Marketing Cabang '+(cab?cab+' ':'')+'Bulan '+BULAN[d.getMonth()]+' '+d.getFullYear();
   db.current.judul=j; $('#fJudul').value=j; persist();
 };
@@ -964,138 +867,6 @@ $('#savedList').addEventListener('click', function(e){
     renderSaved(); persist();
   }
 });
-
-/* ═════ Tab laporan ═════ */
-function L(){ return db.laporan; }
-function renderLaporan(){
-  var l=L();
-  $('#lJudul').value=l.judul;
-  $('#lCabang').innerHTML='<option value="">— belum diisi —</option>'+
-    db.cabang.map(function(c){ return '<option value="'+esc(c)+'">'+esc(c)+'</option>'; }).join('');
-  $('#lCabang').value=l.cabang;
-  $('#lPic').value=l.pic;
-  $('#lKegiatan').value=l.kegiatan;
-  $('#lTgl1').value=l.tgl1; $('#lTgl2').value=l.tgl2;
-  $('#lArea').value=l.area; $('#lReach').value=grp(l.reach); $('#lSegmen').value=l.segmen;
-  $('#lUnit').value=l.unit;
-  renderLatar(); renderTipe(); renderBiaya();
-}
-function renderLatar(){
-  $('#lLatar').innerHTML=L().latar.map(function(t,i){
-    return '<div class="mini"><span class="n">'+(i+1)+'.</span>'+
-      '<textarea data-latar="'+i+'">'+esc(t)+'</textarea>'+
-      '<button class="btn sm danger" data-latardel="'+i+'">✕</button></div>';
-  }).join('');
-}
-$('#lLatar').addEventListener('input', function(e){
-  if(e.target.dataset.latar!==undefined){ L().latar[+e.target.dataset.latar]=e.target.value; persist(); }
-});
-$('#lLatar').addEventListener('click', function(e){
-  var b=e.target.closest('[data-latardel]'); if(!b) return;
-  L().latar.splice(+b.dataset.latardel,1); renderLatar(); persist();
-});
-$('#lLatarAdd').onclick=function(){ L().latar.push(''); renderLatar(); persist(); };
-
-function renderTipe(){
-  $('#lTipe').innerHTML=L().tipe.map(function(t,i){
-    return '<tr data-i="'+i+'"><td class="nm">'+esc(t.nama)+'</td>'+
-      '<td><input inputmode="numeric" data-tk="tSpk" value="'+esc(t.tSpk)+'"></td>'+
-      '<td><input inputmode="numeric" data-tk="tDo" value="'+esc(t.tDo)+'"></td>'+
-      '<td><input inputmode="numeric" data-tk="aSpk" value="'+esc(t.aSpk)+'"></td>'+
-      '<td><input inputmode="numeric" data-tk="aDo" value="'+esc(t.aDo)+'"></td></tr>';
-  }).join('');
-  totalTipe();
-}
-function totalTipe(){
-  var t={tSpk:0,tDo:0,aSpk:0,aDo:0};
-  L().tipe.forEach(function(x){ t.tSpk+=num(x.tSpk); t.tDo+=num(x.tDo); t.aSpk+=num(x.aSpk); t.aDo+=num(x.aDo); });
-  $('#tTS').textContent=t.tSpk; $('#tTD').textContent=t.tDo;
-  $('#tAS').textContent=t.aSpk; $('#tAD').textContent=t.aDo;
-  return t;
-}
-$('#lTipe').addEventListener('input', function(e){
-  var inp=e.target; if(!inp.dataset.tk) return;
-  inp.value=digits(inp.value);
-  L().tipe[+inp.closest('tr').dataset.i][inp.dataset.tk]=inp.value;
-  totalTipe(); persist();
-});
-
-function renderBiaya(){
-  var baris=L().biaya.map(function(b,i){
-    return '<div class="brow" data-i="'+i+'">'+
-      '<input class="u" type="text" data-bk="uraian" value="'+esc(b.uraian)+'" placeholder="FB ADS - NAMA">'+
-      '<input class="m" type="tel" inputmode="numeric" data-bk="budget" value="'+grp(b.budget)+'" placeholder="Budget">'+
-      '<input class="m" type="tel" inputmode="numeric" data-bk="aktual" value="'+grp(b.aktual)+'" placeholder="Aktual">'+
-      '<button class="btn sm danger" data-bdel="'+i+'">✕</button></div>';
-  }).join('');
-  $('#lBiaya').innerHTML='<div class="btbl">'+
-    '<div class="bhead"><span class="hu">Rincian biaya</span><span class="hm">Budget</span>'+
-    '<span class="hm">Aktual</span><span class="hx"></span></div>'+baris+'</div>';
-  totalBiaya();
-}
-function totalBiaya(){
-  var b=0,a=0;
-  L().biaya.forEach(function(x){ b+=num(x.budget); a+=num(x.aktual); });
-  $('#lBiayaTot').textContent=(rupiah(String(b))||'Rp0')+' / '+(rupiah(String(a))||'Rp0');
-  return {budget:b, aktual:a};
-}
-$('#lBiaya').addEventListener('input', function(e){
-  var inp=e.target; if(!inp.dataset.bk) return;
-  var i=+inp.closest('.brow').dataset.i, k=inp.dataset.bk;
-  if(k==='uraian'){ L().biaya[i].uraian=inp.value; }
-  else { var raw=digits(inp.value); L().biaya[i][k]=raw; inp.value=grp(raw); totalBiaya(); }
-  persist();
-});
-$('#lBiaya').addEventListener('click', function(e){
-  var b=e.target.closest('[data-bdel]'); if(!b) return;
-  L().biaya.splice(+b.dataset.bdel,1); renderBiaya(); persist();
-});
-$('#lBiayaAdd').onclick=function(){ L().biaya.push({uraian:'FB ADS - ', budget:'', aktual:''}); renderBiaya(); persist(); };
-$('#lBiayaSales').onclick=function(){
-  if(!confirm('Ganti seluruh baris rincian biaya dengan daftar sales?')) return;
-  L().biaya=db.sales.map(function(s){ return {uraian:'FB ADS - '+s.nama, budget:'500000', aktual:'500000'}; });
-  renderBiaya(); persist();
-};
-
-function renderTtd(){
-  $('#ttdSet').innerHTML=PERAN.map(function(p){
-    return '<label class="f"><span>'+esc(p[1])+'</span>'+
-      '<input type="text" data-ttd="'+p[0]+'" value="'+esc(db.pejabat[p[0]]||'')+'"></label>';
-  }).join('');
-}
-$('#ttdSet').addEventListener('input', function(e){
-  if(e.target.dataset.ttd){ db.pejabat[e.target.dataset.ttd]=e.target.value; persist(); }
-});
-$('#lJudul').addEventListener('input', function(e){ L().judul=e.target.value; persist(); });
-$('#lJudulAuto').onclick=function(){
-  var d=new Date(), cab=(L().cabang||'').trim().toUpperCase();
-  L().judul='LAPORAN DIGITAL MARKETING '+(cab?'CABANG '+cab+' ':'')+
-            'BULAN '+BULAN[d.getMonth()].toUpperCase()+' '+d.getFullYear();
-  $('#lJudul').value=L().judul; persist();
-};
-$('#lCabang').addEventListener('change', function(e){ L().cabang=e.target.value; persist(); });
-$('#lCabangAdd').onclick=function(){
-  var c=prompt('Nama cabang / dealer:'); if(!c) return;
-  c=c.trim().toUpperCase();
-  if(db.cabang.indexOf(c)<0) db.cabang.push(c);
-  L().cabang=c; renderLaporan(); persist();
-};
-$('#lCabangDel').onclick=function(){
-  if(!L().cabang) return toast('Belum ada cabang yang dipilih');
-  if(!confirm('Hapus cabang '+L().cabang+' dari daftar?')) return;
-  db.cabang=db.cabang.filter(function(x){ return x!==L().cabang; });
-  L().cabang=db.cabang[0]||''; renderLaporan(); persist();
-};
-$('#lPic').addEventListener('input', function(e){ L().pic=e.target.value; persist(); });
-$('#lKegiatan').addEventListener('input', function(e){ L().kegiatan=e.target.value; persist(); });
-$('#lTgl1').addEventListener('change', function(e){ L().tgl1=e.target.value; persist(); });
-$('#lTgl2').addEventListener('change', function(e){ L().tgl2=e.target.value; persist(); });
-$('#lArea').addEventListener('input', function(e){ L().area=e.target.value; persist(); });
-$('#lReach').addEventListener('input', function(e){
-  var raw=digits(e.target.value); L().reach=raw; e.target.value=grp(raw); persist(); });
-$('#lSegmen').addEventListener('input', function(e){ L().segmen=e.target.value; persist(); });
-$('#lUnit').addEventListener('input', function(e){ L().unit=e.target.value; persist(); });
-
 
 /* ═════ Tab penyelesaian activity ═════ */
 function A(){ return db.activity; }
@@ -1189,6 +960,17 @@ $('#aFoto').addEventListener('click', function(e){
   }
 });
 
+/* ═════ Nama pejabat penanda tangan (tab Data) ═════ */
+function renderTtd(){
+  $('#ttdSet').innerHTML=PERAN.map(function(p){
+    return '<label class="f"><span>'+esc(p[1])+'</span>'+
+      '<input type="text" data-ttd="'+p[0]+'" value="'+esc(db.pejabat[p[0]]||'')+'"></label>';
+  }).join('');
+}
+$('#ttdSet').addEventListener('input', function(e){
+  if(e.target.dataset.ttd){ db.pejabat[e.target.dataset.ttd]=e.target.value; persist(); }
+});
+
 /* ═════ Data sales ═════ */
 function renderSalesEditor(){
   $('#salesList').innerHTML=db.sales.map(function(s,i){
@@ -1256,75 +1038,6 @@ function sheetKlaim(f){
     '<div class="f-cap"><span>Materi Iklan yang di tayangkan</span></div>'+
     '</div></section>';
 }
-
-function sheetLaporan(){
-  var l=L();
-  var tt=totalTipe(), tb=totalBiaya();
-  var kv=function(k,v){ return '<tr><td class="k">'+k+'</td><td class="c">:</td><td>'+v+'</td></tr>'; };
-
-  var barisTipe=l.tipe.map(function(t){
-    return '<tr><td class="nm">'+esc(t.nama)+'</td><td class="n">'+esc(t.tSpk)+'</td><td class="n">'+
-      esc(t.tDo)+'</td><td class="n">'+esc(t.aSpk)+'</td><td class="n">'+esc(t.aDo)+'</td></tr>';
-  }).join('');
-
-  var barisBiaya=l.biaya.map(function(b){
-    return '<tr><td>'+esc(b.uraian)+'</td><td class="n">'+esc(rupiah(b.budget))+'</td>'+
-      '<td class="n b">'+esc(rupiah(b.aktual))+'</td></tr>';
-  }).join('');
-
-  return '<section class="sheet"><div class="rframe">'+
-    '<div class="r-title">'+esc(l.judul)+'</div>'+
-
-    '<div class="rbox"><table class="kv">'+
-      kv('CABANG / DEALER', esc(l.cabang))+
-      kv('PIC', esc(l.pic))+
-    '</table></div>'+
-
-    '<div class="rbox"><div class="hd">LATAR BELAKANG &amp; TUJUAN KEGIATAN:</div>'+
-      l.latar.filter(function(x){ return String(x).trim(); })
-             .map(function(x,i){ return '<div class="li">'+(i+1)+'. '+esc(x)+'</div>'; }).join('')+
-    '</div>'+
-
-    '<div class="rbox"><table class="kv">'+kv('KEGIATAN / EVENT', esc(l.kegiatan))+'</table></div>'+
-    '<div class="rbox"><table class="kv">'+kv('TANGGAL PELAKSANAAN', esc(rentangTanggal(l)))+'</table></div>'+
-
-    '<div class="rrow">'+
-      '<div class="rbox"><table class="kv">'+
-        kv('AREA TARGET', esc(l.area))+
-        kv('ACTUAL REACH', esc(l.reach ? grp(l.reach)+' ORANG' : ''))+
-      '</table></div>'+
-      '<div class="rbox"><table class="kv"><tr><td class="k">SEGMENTATION</td>'+
-        '<td class="c">:</td><td>'+esc(l.segmen).replace(/\n/g,'<br>')+'</td></tr></table></div>'+
-    '</div>'+
-
-    '<div class="rbox"><table class="tipe">'+
-      '<tr><th rowspan="2" style="width:22%">TIPE</th><th colspan="2">TARGET</th><th colspan="2">AKTUAL</th></tr>'+
-      '<tr><th>SPK</th><th>DO</th><th>SPK</th><th>DO</th></tr>'+
-      barisTipe+
-      '<tr class="tot"><td class="nm">TOTAL</td><td class="n">'+tt.tSpk+'</td><td class="n">'+tt.tDo+
-        '</td><td class="n">'+tt.aSpk+'</td><td class="n">'+tt.aDo+'</td></tr>'+
-    '</table></div>'+
-
-    '<div class="rbox"><table class="kv">'+kv('UNIT PROMOSI', esc(l.unit))+'</table></div>'+
-
-    '<div class="rbox"><table class="biaya">'+
-      '<tr><th>RINCIAN BIAYA</th><th style="width:22%">BUDGET</th><th style="width:22%">AKTUAL</th></tr>'+
-      barisBiaya+
-      '<tr class="gap"><td></td><td></td><td></td></tr>'+
-      '<tr class="tot"><td class="lbl">TOTAL</td><td class="n">'+esc(rupiah(String(tb.budget))||'Rp0')+
-        '</td><td class="n">'+esc(rupiah(String(tb.aktual))||'Rp0')+'</td></tr>'+
-    '</table></div>'+
-
-    '<table class="ttd">'+
-      '<tr><td class="role">Diajukan oleh</td><td class="role" colspan="3">Diketahui, dicek &amp; Disetujui oleh</td></tr>'+
-      '<tr><td class="role">PIC</td><td class="role">SS</td><td class="role">KEPALA CABANG</td><td class="role">ADH</td></tr>'+
-      '<tr><td class="sp"></td><td class="sp"></td><td class="sp"></td><td class="sp"></td></tr>'+
-      '<tr><td class="nm">'+esc(db.pejabat.pic)+'</td><td class="nm">'+esc(db.pejabat.ss)+'</td>'+
-        '<td class="nm">'+esc(db.pejabat.kacab)+'</td><td class="nm">'+esc(db.pejabat.adh)+'</td></tr>'+
-    '</table>'+
-  '</div></section>';
-}
-
 
 /* ═════ Lembar penyelesaian activity ═════ */
 function sheetActivity(){
@@ -1411,14 +1124,12 @@ function sheetFotoActivity(){
 function halaman(){
   var s=$('#fScope').value, out=[];
   var klaim=function(){ return (db.saved.length?db.saved:[db.current]).map(sheetKlaim); };
-  if(s==='lap') out.push(sheetLaporan());
-  else if(s==='act') out.push(sheetActivity(), sheetFotoActivity());
-  else if(s==='one') out.push(sheetKlaim(db.current));
+  if(s==='one') out.push(sheetKlaim(db.current));
   else if(s==='all') out=klaim();
   else if(s==='semua'){
-    out.push(sheetLaporan(), sheetActivity(), sheetFotoActivity());
+    out.push(sheetActivity(), sheetFotoActivity());
     out=out.concat(klaim());
-  } else { out.push(sheetLaporan()); out=out.concat(klaim()); }
+  } else out.push(sheetActivity(), sheetFotoActivity());
   return out.filter(Boolean).join('');
 }
 
@@ -1545,8 +1256,8 @@ function adaJembatanAndroid(){
 function judulCetak(){
   var v=$('#fScope').value;
   if(v==='one'||v==='all') return db.current.judul||'Klaim FB Ads';
-  if(v==='act') return 'Penyelesaian Activity Offline '+(A().activity||'');
-  return L().judul||'Laporan';
+  if(v==='act'||v==='semua') return ('Penyelesaian Activity Offline '+(A().activity||'')).trim();
+  return 'Penyelesaian Activity Offline';
 }
 function gambarLembar(sheet, skala){
   return new Promise(function(res,rej){
@@ -1784,7 +1495,7 @@ function unduh(nama, blob){
 }
 function berkasCetak(html){
   var css=$$('style').map(function(s){ return s.textContent; }).join('\n');
-  return '<!doctype html><html lang="id"><head><meta charset="utf-8"><title>'+esc(L().judul)+'</title>'+
+  return '<!doctype html><html lang="id"><head><meta charset="utf-8"><title>'+esc(judulCetak())+'</title>'+
     '<style>'+css+'\nbody{background:#8A99A8;padding:10px}#printRoot{display:block}'+
     '.sheet{box-shadow:0 2px 12px rgba(0,0,0,.25)}'+
     '@media print{html,body{padding:0!important;margin:0!important;background:#fff!important}.sheet{box-shadow:none}}'+
@@ -1799,9 +1510,11 @@ $('#zipBtn').onclick=function(){
 
     var pv=$('#printRoot').innerHTML;
     files.push({name:'Cetak-pilihan-saat-ini.html', bytes:enc.encode(berkasCetak(pv))});
-    files.push({name:'Cetak-laporan.html', bytes:enc.encode(berkasCetak(sheetLaporan()))});
-    var semua=[sheetLaporan()].concat((db.saved.length?db.saved:[db.current]).map(sheetKlaim)).join('');
-    files.push({name:'Cetak-laporan-dan-semua-klaim.html', bytes:enc.encode(berkasCetak(semua))});
+    files.push({name:'Cetak-activity-offline.html',
+                bytes:enc.encode(berkasCetak(sheetActivity()+sheetFotoActivity()))});
+    var semua=[sheetActivity(), sheetFotoActivity()]
+      .concat((db.saved.length?db.saved:[db.current]).map(sheetKlaim)).filter(Boolean).join('');
+    files.push({name:'Cetak-semua-halaman.html', bytes:enc.encode(berkasCetak(semua))});
 
     var daftar=[];
     (db.saved.length?db.saved:[db.current]).forEach(function(f,i){
@@ -1818,7 +1531,7 @@ $('#zipBtn').onclick=function(){
     });
 
     files.push({name:'ISI-BACKUP.txt', bytes:enc.encode(
-      'Backup sesi — '+L().judul+'\n'+
+      'Backup sesi — '+judulCetak()+'\n'+
       'Dibuat: '+new Date().toLocaleString('id-ID')+'\n\n'+
       'data.json .......................... cadangan lengkap, bisa dipulihkan lewat tab Data\n'+
       'Cetak-*.html ....................... buka di peramban lalu Ctrl+P untuk mencetak A4\n'+
@@ -1827,7 +1540,7 @@ $('#zipBtn').onclick=function(){
       'Jumlah gambar: '+n+'\n'+daftar.join('\n')+'\n')});
 
     var blob=makeZip(files);
-    unduh(bersihNama(L().judul)+'.zip', blob);
+    unduh(bersihNama(judulCetak())+'.zip', blob);
     $('#zipInfo').textContent='Backup terakhir: '+files.length+' berkas, '+Math.round(blob.size/1024)+' KB.';
     toast('Backup ZIP diunduh');
   }).catch(function(){ toast('Backup gagal dibuat'); })
@@ -1836,7 +1549,7 @@ $('#zipBtn').onclick=function(){
 
 /* ═════ Cadangan JSON ═════ */
 $('#expJson').onclick=function(){
-  unduh('Cadangan_'+bersihNama(L().judul)+'.json',
+  unduh('Cadangan_'+bersihNama(judulCetak())+'.json',
         new Blob([JSON.stringify(db)],{type:'application/json'}));
   toast('Cadangan diunduh');
 };
@@ -1844,7 +1557,6 @@ $('#expJson').onclick=function(){
    sekarang dipindah ke pengaturan. Disalin sekali supaya tidak hilang. */
 function rapikanData(){
   db.current=db.current||blankKlaim();
-  db.laporan=db.laporan||blankLaporan();
   db.activity=db.activity||blankActivity();
   if(!db.activity.foto) db.activity.foto=[];
   db.saved=db.saved||[];
@@ -1855,19 +1567,19 @@ function rapikanData(){
     if(!db.sales.length) db.sales=salinDaftarAwal();
     db.sudahIsiSales=1;
   }
-  db.cabang=db.cabang||[];
   db.judulHist=db.judulHist||[];
   if(!db.pejabat){
     db.pejabat=pejabatAwal();
-    var lama=db.laporan.ttd;
+    var lama=db.laporan && db.laporan.ttd;   /* data versi lama */
     if(lama){
       PERAN.forEach(function(p){
         if(lama[p[0]] && lama[p[0]].nama) db.pejabat[p[0]]=lama[p[0]].nama;
       });
     }
   }
-  if(db.laporan.ttd) delete db.laporan.ttd;
-  if(db.laporan.cabang && db.cabang.indexOf(db.laporan.cabang)<0) db.cabang.push(db.laporan.cabang);
+  /* Tab Laporan sudah dihapus — sisa datanya ikut dibuang. */
+  if(db.laporan) delete db.laporan;
+  if(db.cabang) delete db.cabang;
 }
 
 $('#impJson').onclick=function(){ $('#impFile').click(); };
@@ -1893,9 +1605,9 @@ $('#tabs').addEventListener('click', function(e){ var b=e.target.closest('button
 
 /* ═════ Mulai ═════ */
 function renderAll(){
-  renderKlaim(); renderLaporan(); renderActivity(); renderSalesEditor(); renderTtd();
+  renderKlaim(); renderActivity(); renderSalesEditor(); renderTtd();
   $('#fScope').value=db.scope||'lap';
-  $('#sub').textContent=(L().cabang ? L().cabang+' — ' : '')+db.saved.length+' halaman klaim';
+  $('#sub').textContent=(A().cabang ? A().cabang+' — ' : '')+db.saved.length+' halaman klaim';
 }
 openIDB().then(function(x){
   idb=x;
