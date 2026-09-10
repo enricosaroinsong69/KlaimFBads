@@ -252,7 +252,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
 
 <header class="appbar">
   <h1>Laporan Activity Marketing</h1>
-  <p id="sub">D745 Tomohon</p>
+  <p id="sub">Formulir cabang</p>
   <nav class="tabs" id="tabs">
     <button data-t="lap" class="on">Laporan</button>
     <button data-t="klaim">Klaim FB Ads</button>
@@ -269,7 +269,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
     <h2>Formulir klaim per salesman</h2>
     <div class="cb">
       <label class="f"><span>1. Judul</span>
-        <input type="text" id="fJudul" list="judulHist" placeholder="Claim Digital Marketing Cabang D745 Bulan Juli 2026">
+        <input type="text" id="fJudul" list="judulHist" placeholder="Claim Digital Marketing Cabang ... Bulan Juli 2026">
         <datalist id="judulHist"></datalist>
       </label>
       <div class="row" style="margin:-6px 0 13px">
@@ -395,13 +395,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
     </div>
   </div>
 
-  <div class="card">
-    <h2>Tanda tangan</h2>
-    <div class="cb">
-      <p class="hint">Yang dicetak hanya namanya. Kolom tanda tangannya sengaja dibiarkan kosong supaya bisa ditandatangani di atas kertas.</p>
-      <div id="lTtd"></div>
-    </div>
-  </div>
 </section>
 
 <!-- ═══════ CETAK ═══════ -->
@@ -476,20 +469,28 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
   <div class="card">
     <h2>Backup sesi ke ZIP</h2>
     <div class="cb">
-      <p class="hint">Satu berkas ZIP berisi seluruh foto yang diunggah, tanda tangan, berkas siap cetak, dan cadangan data. Nama berkasnya mengikuti judul laporan.</p>
+      <p class="hint">Satu berkas ZIP berisi seluruh foto yang diunggah, berkas siap cetak, dan cadangan data. Nama berkasnya mengikuti judul laporan.</p>
       <button class="btn pri block" id="zipBtn">Unduh backup ZIP</button>
       <p class="hint" style="margin:10px 0 0" id="zipInfo"></p>
     </div>
   </div>
 
   <div class="card">
+    <h2>Nama pejabat penanda tangan</h2>
+    <div class="cb">
+      <p class="hint">Dipakai di blok tanda tangan halaman laporan. Ubah di sini kalau ada pergantian pimpinan — berlaku untuk semua laporan.</p>
+      <div id="ttdSet"></div>
+    </div>
+  </div>
+
+  <div class="card">
     <h2>Nama sales &amp; akun iklan</h2>
     <div class="cb">
-      <p class="hint">Daftar ini dipakai dropdown klaim, isian PIC, dan tombol "Isi dari daftar sales".</p>
+      <p class="hint">Daftar ini dipakai dropdown di tab Klaim FB Ads dan tombol "Isi dari daftar sales". Awalnya kosong — isi sendiri sesuai sales di cabang Anda.</p>
       <div class="slist" id="salesList"></div>
       <div class="row" style="margin-top:12px">
         <button class="btn nav" id="addSales">+ Tambah sales</button>
-        <button class="btn" id="resetSales">Kembalikan daftar awal</button>
+        <button class="btn danger" id="resetSales">Kosongkan daftar</button>
       </div>
     </div>
   </div>
@@ -531,17 +532,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
 
 <script>
 /* ═════ Data awal ═════ */
-var SALES_DEFAULT = [
-  ['GERRY D LONTAAN','DaihatsuManadoGerry'],
-  ['ANDREY ALFONS LEMBANG','AndreyALfonz'],
-  ['JANSEN SAMUEL KASENDA','JansenSamuelKasenda'],
-  ['NOVRITA VERONIKA ROTIKAN','NovritaVeronikaRotikan'],
-  ['EXCELSIS DEO RUUS','ExcelRuus'],
-  ['CLAUDIA CHRISTY SENDUK','ClaudiaAstraDaihatsuTomohon'],
-  ['JORDAN EDUARD LOMPOLIUW','JordanLompoliuw'],
-  ['GLORIA WINONA KAWENGIAN',''],
-  ['JULIA RIANTI MOKOAGOUW','']
-].map(function(a){ return {nama:a[0], akun:a[1]}; });
+/* Daftar sales sengaja dikosongkan — diisi sendiri lewat tab Data. */
+var SALES_DEFAULT = [];
 
 var BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 var TIPE_URUT = ['ROCKY','TERIOS','GMPU','GMMB','GMBV','SIRION','LUXIO','SIGRA','AYLA','XENIA'];
@@ -562,40 +554,40 @@ function blankKlaim(){
 function blankLaporan(){
   var d = new Date();
   return {
-    judul:'LAPORAN DIGITAL MARKETING CABANG TOMOHON BULAN '+BULAN[d.getMonth()].toUpperCase()+' '+d.getFullYear(),
-    cabang:'TOMOHON',
+    judul:'LAPORAN DIGITAL MARKETING BULAN '+BULAN[d.getMonth()].toUpperCase()+' '+d.getFullYear(),
+    cabang:'',
     pic:'KRISNI JACKY ENRIKO SAROINSONG',
     latar:[
       'Mencapai target SPK dan Penjualan cabang dengan memanfaatkan activity online.',
-      'Membangun product image DAIHATSU di wilayah SULUT melalui promosi ke daerah Tomohon dan sekitarnya.'
+      'Membangun product image DAIHATSU di wilayah kerja cabang melalui promosi digital.'
     ],
     kegiatan:'DIGITAL MARKETING',
     tgl1:'', tgl2:'',
-    area:'SULAWESI UTARA', reach:'',
+    area:'', reach:'',
     segmen:'PNS, KARYAWAN, WIRASWASTA\nUMUR 25-60',
     tipe: TIPE_URUT.map(function(t){ return {nama:t, tSpk:'', tDo:'', aSpk:'', aDo:''}; }),
     unit:'LCGC, PU',
-    biaya: [
-      'JANSEN SAMUEL KASENDA','JORDAN EDUARD LOMPOLIUW','GLORIA WINONA KAWENGIAN',
-      'CLAUDIA CHRISTY SENDUK','JULIA RIANTI MOKOAGOUW','ANDREY ALFONS LEMBANG',
-      'GERRY D LONTAAN','EXCELSIS DEO RUUS'
-    ].map(function(n){ return {uraian:'FB ADS - '+n, budget:'500000', aktual:'500000'}; }),
-    ttd:{
-      pic:{nama:'KRISNI JACKY ENRIKO SAROINSONG'},
-      ss:{nama:'KRISNI JACKY ENRIKO SAROINSONG'},
-      kacab:{nama:'ARI SUGIH ARTO'},
-      adh:{nama:'CHRISTIAN ABEDNEGO'}
-    }
+    biaya: [{uraian:'FB ADS - ', budget:'', aktual:''}]
+  };
+}
+/* Nama penanda tangan disimpan sekali untuk semua laporan, diubah di tab Data. */
+function pejabatAwal(){
+  return {
+    pic:'KRISNI JACKY ENRIKO SAROINSONG',
+    ss:'KRISNI JACKY ENRIKO SAROINSONG',
+    kacab:'ARI SUGIH ARTO',
+    adh:'CHRISTIAN ABEDNEGO'
   };
 }
 
 var db = {
   sales: SALES_DEFAULT.map(function(s){ return {nama:s.nama, akun:s.akun}; }),
-  cabang: ['TOMOHON'],
+  cabang: [],
   judulHist: [],
   saved: [],
   current: blankKlaim(),
   laporan: blankLaporan(),
+  pejabat: pejabatAwal(),
   scope: 'lap'
 };
 
@@ -717,10 +709,19 @@ document.addEventListener('click', function(e){
 
 function renderSalesOptions(){
   var sel=$('#fSales');
-  sel.innerHTML='<option value="">— pilih nama sales —</option>'+db.sales.map(function(s){
-    return '<option value="'+esc(s.nama)+'">'+esc(s.nama)+'</option>'; }).join('');
+  var kosong=db.sales.length?'— pilih nama sales —':'— belum ada, tambahkan dulu —';
+  sel.innerHTML='<option value="">'+kosong+'</option>'+
+    db.sales.map(function(s){ return '<option value="'+esc(s.nama)+'">'+esc(s.nama)+'</option>'; }).join('')+
+    '<option value="__baru__">+ Tambah sales baru…</option>';
   sel.value=db.current.sales||'';
   $('#salesHint').innerHTML=db.sales.map(function(s){ return '<option value="'+esc(s.nama)+'">'; }).join('');
+}
+function tambahSales(){
+  var nama=prompt('Nama sales:'); if(!nama) return null;
+  var akun=prompt('Nama akun iklan:')||'';
+  var baru={nama:nama.trim().toUpperCase(), akun:akun.trim()};
+  db.sales.push(baru); renderSalesEditor(); persist();
+  return baru;
 }
 function renderKlaim(){
   $('#fJudul').value=db.current.judul;
@@ -733,6 +734,14 @@ function renderKlaim(){
 }
 $('#fJudul').addEventListener('input', function(e){ db.current.judul=e.target.value; persist(); });
 $('#fSales').addEventListener('change', function(e){
+  if(e.target.value==='__baru__'){
+    var baru=tambahSales();
+    renderSalesOptions();
+    if(!baru){ $('#fSales').value=db.current.sales||''; return; }
+    db.current.sales=baru.nama; db.current.akun=baru.akun;
+    $('#fSales').value=baru.nama; $('#fAkun').value=baru.akun; persist();
+    return;
+  }
   db.current.sales=e.target.value;
   var s=db.sales.filter(function(x){ return x.nama===e.target.value; })[0];
   db.current.akun=s?s.akun:''; $('#fAkun').value=db.current.akun; persist();
@@ -743,7 +752,8 @@ $('#fNominal').addEventListener('input', function(e){
 $('#fTanggal').addEventListener('change', function(e){ db.current.tanggal=e.target.value; persist(); });
 $('#judulAuto').onclick=function(){
   var d=new Date();
-  var j='Claim Digital Marketing Cabang D745 Bulan '+BULAN[d.getMonth()]+' '+d.getFullYear();
+  var cab=(L().cabang||'').trim();
+  var j='Claim Digital Marketing Cabang '+(cab?cab+' ':'')+'Bulan '+BULAN[d.getMonth()]+' '+d.getFullYear();
   db.current.judul=j; $('#fJudul').value=j; persist();
 };
 function renderSaved(){
@@ -788,14 +798,15 @@ function L(){ return db.laporan; }
 function renderLaporan(){
   var l=L();
   $('#lJudul').value=l.judul;
-  $('#lCabang').innerHTML=db.cabang.map(function(c){ return '<option value="'+esc(c)+'">'+esc(c)+'</option>'; }).join('');
+  $('#lCabang').innerHTML='<option value="">— belum diisi —</option>'+
+    db.cabang.map(function(c){ return '<option value="'+esc(c)+'">'+esc(c)+'</option>'; }).join('');
   $('#lCabang').value=l.cabang;
   $('#lPic').value=l.pic;
   $('#lKegiatan').value=l.kegiatan;
   $('#lTgl1').value=l.tgl1; $('#lTgl2').value=l.tgl2;
   $('#lArea').value=l.area; $('#lReach').value=grp(l.reach); $('#lSegmen').value=l.segmen;
   $('#lUnit').value=l.unit;
-  renderLatar(); renderTipe(); renderBiaya(); renderTtd();
+  renderLatar(); renderTipe(); renderBiaya();
 }
 function renderLatar(){
   $('#lLatar').innerHTML=L().latar.map(function(t,i){
@@ -875,19 +886,19 @@ $('#lBiayaSales').onclick=function(){
 };
 
 function renderTtd(){
-  $('#lTtd').innerHTML=PERAN.map(function(p){
-    var key=p[0], lbl=p[1], t=L().ttd[key];
-    return '<label class="f"><span>'+esc(lbl)+'</span>'+
-      '<input type="text" data-ttd="'+key+'" value="'+esc(t.nama)+'"></label>';
+  $('#ttdSet').innerHTML=PERAN.map(function(p){
+    return '<label class="f"><span>'+esc(p[1])+'</span>'+
+      '<input type="text" data-ttd="'+p[0]+'" value="'+esc(db.pejabat[p[0]]||'')+'"></label>';
   }).join('');
 }
-$('#lTtd').addEventListener('input', function(e){
-  if(e.target.dataset.ttd){ L().ttd[e.target.dataset.ttd].nama=e.target.value; persist(); }
+$('#ttdSet').addEventListener('input', function(e){
+  if(e.target.dataset.ttd){ db.pejabat[e.target.dataset.ttd]=e.target.value; persist(); }
 });
 $('#lJudul').addEventListener('input', function(e){ L().judul=e.target.value; persist(); });
 $('#lJudulAuto').onclick=function(){
-  var d=new Date();
-  L().judul='LAPORAN DIGITAL MARKETING CABANG '+(L().cabang||'').toUpperCase()+' BULAN '+BULAN[d.getMonth()].toUpperCase()+' '+d.getFullYear();
+  var d=new Date(), cab=(L().cabang||'').trim().toUpperCase();
+  L().judul='LAPORAN DIGITAL MARKETING '+(cab?'CABANG '+cab+' ':'')+
+            'BULAN '+BULAN[d.getMonth()].toUpperCase()+' '+d.getFullYear();
   $('#lJudul').value=L().judul; persist();
 };
 $('#lCabang').addEventListener('change', function(e){ L().cabang=e.target.value; persist(); });
@@ -898,10 +909,10 @@ $('#lCabangAdd').onclick=function(){
   L().cabang=c; renderLaporan(); persist();
 };
 $('#lCabangDel').onclick=function(){
-  if(db.cabang.length<2) return toast('Minimal satu cabang harus ada');
+  if(!L().cabang) return toast('Belum ada cabang yang dipilih');
   if(!confirm('Hapus cabang '+L().cabang+' dari daftar?')) return;
   db.cabang=db.cabang.filter(function(x){ return x!==L().cabang; });
-  L().cabang=db.cabang[0]; renderLaporan(); persist();
+  L().cabang=db.cabang[0]||''; renderLaporan(); persist();
 };
 $('#lPic').addEventListener('input', function(e){ L().pic=e.target.value; persist(); });
 $('#lKegiatan').addEventListener('input', function(e){ L().kegiatan=e.target.value; persist(); });
@@ -937,15 +948,12 @@ $('#salesList').addEventListener('click', function(e){
   }
 });
 $('#addSales').onclick=function(){
-  var nama=prompt('Nama sales:'); if(!nama) return;
-  var akun=prompt('Nama akun iklan:')||'';
-  db.sales.push({nama:nama.trim().toUpperCase(), akun:akun.trim()});
-  renderSalesEditor(); renderSalesOptions(); persist(); toast('Sales ditambahkan');
+  if(tambahSales()){ renderSalesOptions(); toast('Sales ditambahkan'); }
 };
 $('#resetSales').onclick=function(){
-  if(!confirm('Kembalikan daftar sales ke isi awal?')) return;
-  db.sales=SALES_DEFAULT.map(function(s){ return {nama:s.nama, akun:s.akun}; });
-  renderSalesEditor(); renderSalesOptions(); persist();
+  if(!db.sales.length) return toast('Daftar sudah kosong');
+  if(!confirm('Kosongkan seluruh daftar sales?')) return;
+  db.sales=[]; renderSalesEditor(); renderSalesOptions(); persist();
 };
 
 /* ═════ Lembar cetak ═════ */
@@ -1038,8 +1046,8 @@ function sheetLaporan(){
       '<tr><td class="role">Diajukan oleh</td><td class="role" colspan="3">Diketahui, dicek &amp; Disetujui oleh</td></tr>'+
       '<tr><td class="role">PIC</td><td class="role">SS</td><td class="role">KEPALA CABANG</td><td class="role">ADH</td></tr>'+
       '<tr><td class="sp"></td><td class="sp"></td><td class="sp"></td><td class="sp"></td></tr>'+
-      '<tr><td class="nm">'+esc(l.ttd.pic.nama)+'</td><td class="nm">'+esc(l.ttd.ss.nama)+'</td>'+
-        '<td class="nm">'+esc(l.ttd.kacab.nama)+'</td><td class="nm">'+esc(l.ttd.adh.nama)+'</td></tr>'+
+      '<tr><td class="nm">'+esc(db.pejabat.pic)+'</td><td class="nm">'+esc(db.pejabat.ss)+'</td>'+
+        '<td class="nm">'+esc(db.pejabat.kacab)+'</td><td class="nm">'+esc(db.pejabat.adh)+'</td></tr>'+
     '</table>'+
   '</div></section>';
 }
@@ -1456,17 +1464,35 @@ $('#expJson').onclick=function(){
         new Blob([JSON.stringify(db)],{type:'application/json'}));
   toast('Cadangan diunduh');
 };
+/* Data dari versi lama: nama penanda tangan dulu menempel di tiap laporan,
+   sekarang dipindah ke pengaturan. Disalin sekali supaya tidak hilang. */
+function rapikanData(){
+  db.current=db.current||blankKlaim();
+  db.laporan=db.laporan||blankLaporan();
+  db.saved=db.saved||[];
+  db.sales=db.sales||[];
+  db.cabang=db.cabang||[];
+  db.judulHist=db.judulHist||[];
+  if(!db.pejabat){
+    db.pejabat=pejabatAwal();
+    var lama=db.laporan.ttd;
+    if(lama){
+      PERAN.forEach(function(p){
+        if(lama[p[0]] && lama[p[0]].nama) db.pejabat[p[0]]=lama[p[0]].nama;
+      });
+    }
+  }
+  if(db.laporan.ttd) delete db.laporan.ttd;
+  if(db.laporan.cabang && db.cabang.indexOf(db.laporan.cabang)<0) db.cabang.push(db.laporan.cabang);
+}
+
 $('#impJson').onclick=function(){ $('#impFile').click(); };
 $('#impFile').onchange=function(e){
   var f=e.target.files[0]; if(!f) return;
   f.text().then(function(txt){
     var d=JSON.parse(txt);
-    if(!d.sales) throw 0;
-    db=d;
-    db.current=db.current||blankKlaim();
-    db.laporan=db.laporan||blankLaporan();
-    db.saved=db.saved||[];
-    db.cabang=db.cabang||['TOMOHON']; db.judulHist=db.judulHist||[];
+    if(!d.laporan && !d.sales) throw 0;
+    db=d; rapikanData();
     renderAll(); persist(); toast('Cadangan dipulihkan');
   }).catch(function(){ toast('Berkas cadangan tidak terbaca'); });
   e.target.value='';
@@ -1483,22 +1509,18 @@ $('#tabs').addEventListener('click', function(e){ var b=e.target.closest('button
 
 /* ═════ Mulai ═════ */
 function renderAll(){
-  renderKlaim(); renderLaporan(); renderSalesEditor();
+  renderKlaim(); renderLaporan(); renderSalesEditor(); renderTtd();
   $('#fScope').value=db.scope||'lap';
-  $('#sub').textContent=(L().cabang||'')+' — '+(db.saved.length)+' halaman klaim';
+  $('#sub').textContent=(L().cabang ? L().cabang+' — ' : '')+db.saved.length+' halaman klaim';
 }
 openIDB().then(function(x){
   idb=x;
   return kvGet('db');
 }).then(function(saved){
-  if(saved && saved.sales){
+  if(saved && (saved.laporan || saved.sales)){
     db=saved;
-    db.current=db.current||blankKlaim();
-    db.laporan=db.laporan||blankLaporan();
-    db.saved=db.saved||[];
-    db.cabang=db.cabang||['TOMOHON']; db.judulHist=db.judulHist||[];
-    if(!db.laporan.ttd) db.laporan.ttd=blankLaporan().ttd;
   }
+  rapikanData();
   if(!idb && !storageOK) $('#storeWarn').textContent='Penyimpanan peramban tidak aktif — isian tidak tersimpan setelah aplikasi ditutup.';
   renderAll();
   if('serviceWorker' in navigator && location.protocol.indexOf('http')===0)
