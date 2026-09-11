@@ -7,7 +7,7 @@
  *
  * Naikkan angka VERSI setiap kali index.html diganti.
  */
-const VERSI = 'v9';
+const VERSI = 'v10';
 const CACHE = 'klaim-fbads-' + VERSI;
 const ASSETS = [
   './',
