@@ -238,6 +238,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
         font-family:Arial,Helvetica,sans-serif}
 .b-title{text-align:center;font-weight:bold;font-size:1.15em;margin:0 0 3.5mm}
 .b-per{font-weight:bold;font-size:.92em;margin:0 0 1mm}
+.b-kepala{display:flex;justify-content:center;margin:0 0 3.5mm}
+.b-kepala table{border-collapse:collapse;font-size:.95em}
+.b-kepala td{border:.7pt solid #000;padding:1mm 6mm;font-weight:bold;white-space:nowrap}
 .btbl{width:100%;border-collapse:collapse;font-size:.92em}
 .btbl th,.btbl td{border:.7pt solid #000;padding:.9mm 1.4mm}
 .btbl th{background:#FFFF00;text-align:center;font-weight:bold}
@@ -578,7 +581,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
   <div class="card">
     <h2>Kepala formulir</h2>
     <div class="cb">
-      <label class="f"><span>Cabang</span><input type="text" id="bCabang" placeholder="TOMOHON"></label>
+      <label class="f"><span>Judul formulir</span>
+        <input type="text" id="bJudul" placeholder="FORM PENGAJUAN PROMOSI BUDGET CABANG TOMOHON SEPTEMBER 2026"></label>
+      <div class="two">
+        <label class="f"><span>No activity</span><input type="text" id="bNoAct"></label>
+        <label class="f"><span>Budget</span>
+          <select id="bSumber">
+            <option value="">— pilih —</option>
+            <option value="Cabang">Cabang</option>
+            <option value="HO">HO</option>
+          </select></label>
+      </div>
       <label class="f"><span>Periode</span><input type="text" id="bPeriode" placeholder="September 2026"></label>
       <div class="row" style="margin:-6px 0 11px">
         <button class="btn sm" id="bPeriodeAuto">Isi bulan ini</button>
@@ -836,7 +849,8 @@ function blankBudget(){
   var d=new Date();
   var baris=function(){ return {act:'', pic:'', mg:[0,0,0,0,0], budget:'', spk:'', doo:''}; };
   return {
-    cabang:'', periode:BULAN[d.getMonth()]+' '+d.getFullYear(),
+    judul:'', noAct:'', sumber:'',
+    periode:BULAN[d.getMonth()]+' '+d.getFullYear(),
     budgetBulan:'',
     online:[baris(),baris(),baris()],
     offline:[baris(),baris(),baris()]
@@ -1314,7 +1328,9 @@ var MINGGU=['1 - 5','6 - 12','13 - 19','20 - 26','27 - 31'];
 
 function renderBudget(){
   var b=B();
-  $('#bCabang').value=b.cabang||'';
+  $('#bJudul').value=b.judul||'';
+  $('#bNoAct').value=b.noAct||'';
+  $('#bSumber').value=b.sumber||'';
   $('#bPeriode').value=b.periode||'';
   $('#bBudget').value=grp(b.budgetBulan);
   renderBarisBudget('online'); renderBarisBudget('offline');
@@ -1353,11 +1369,12 @@ function totalBudget(){
   tulis('#bTotAll',{budget:on.budget+off.budget, spk:on.spk+off.spk, doo:on.doo+off.doo});
   return {on:on, off:off};
 }
-['bCabang','bPeriode'].forEach(function(id){
-  document.getElementById(id).addEventListener('input', function(e){
-    B()[id==='bCabang'?'cabang':'periode']=e.target.value; persist();
+[['bJudul','judul'],['bNoAct','noAct'],['bPeriode','periode']].forEach(function(x){
+  document.getElementById(x[0]).addEventListener('input', function(e){
+    B()[x[1]]=e.target.value; persist();
   });
 });
+$('#bSumber').addEventListener('change', function(e){ B().sumber=e.target.value; persist(); });
 $('#bBudget').addEventListener('input', function(e){
   var raw=digits(e.target.value); B().budgetBulan=raw; e.target.value=grp(raw); persist();
 });
@@ -1652,8 +1669,11 @@ function sheetBudget(){
   var kosong='<tr><td colspan="11" style="border:0;height:2.5mm"></td></tr>';
 
   return '<section class="sheet land"><div class="bframe">'+
-    '<div class="b-title">FORM PENGAJUAN PROMOSI BUDGET CABANG '+esc((b.cabang||'').toUpperCase())+' '+
-      esc((b.periode||'').toUpperCase())+'</div>'+
+    '<div class="b-title">'+esc(b.judul)+'</div>'+
+    '<div class="b-kepala"><table><tr>'+
+      '<td>No Activity :&nbsp; '+esc(b.noAct)+'</td>'+
+      '<td>Budget :&nbsp; '+esc(b.sumber)+'</td>'+
+    '</tr></table></div>'+
     '<div class="b-per">PERIODE : ( '+esc(b.periode)+' )</div>'+
     '<table class="btbl">'+
       '<tr><th style="width:5%">NO</th><th style="width:26%">ACTIVITY</th><th style="width:22%">PIC</th>'+
@@ -2140,6 +2160,16 @@ function rapikanData(){
   db.cabang=db.cabang||[];
   db.activity=db.activity||blankActivity();
   db.budget=db.budget||blankBudget();
+  /* Versi lama menyimpan nama cabang; sekarang judulnya ditulis sendiri. */
+  if(db.budget.judul===undefined){
+    db.budget.judul = db.budget.cabang
+      ? 'FORM PENGAJUAN PROMOSI BUDGET CABANG '+String(db.budget.cabang).toUpperCase()+
+        ' '+String(db.budget.periode||'').toUpperCase()
+      : '';
+  }
+  if(db.budget.noAct===undefined) db.budget.noAct='';
+  if(db.budget.sumber===undefined) db.budget.sumber='';
+  if('cabang' in db.budget) delete db.budget.cabang;
   if(!db.activity.foto) db.activity.foto=[];
   db.saved=db.saved||[];
   db.sales=db.sales||[];
