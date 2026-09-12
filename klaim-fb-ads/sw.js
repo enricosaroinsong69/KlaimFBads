@@ -1,80 +1,65 @@
-/* Service worker aplikasi Laporan Activity Marketing.
- *
- * Versi sebelumnya selalu mengambil dari simpanan lebih dulu, akibatnya
- * pembaruan di server tidak pernah sampai ke HP. Sekarang halaman dan
- * berkas pengaturannya diambil dari jaringan lebih dulu; simpanan hanya
- * dipakai kalau sedang tidak ada internet.
- *
- * Naikkan angka VERSI setiap kali index.html diganti.
- */
-const VERSI = 'v10';
-const CACHE = 'klaim-fbads-' + VERSI;
-const ASSETS = [
+/* Service worker — supaya aplikasi tetap terbuka saat iPhone luring.
+   Naikkan angka VER setiap kali index.html diganti, supaya HP menarik versi baru. */
+var VER = 'stok-daihatsu-v1';
+
+var SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './icon-192.png',
-  './icon-512.png',
-  './icon-maskable-512.png'
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-512-maskable.png',
+  './icons/apple-touch-icon-180.png',
+  './icons/apple-touch-icon-167.png',
+  './icons/apple-touch-icon-152.png',
+  './icons/apple-touch-icon-120.png',
+  './icons/favicon-32.png'
 ];
 
-self.addEventListener('install', e => {
+self.addEventListener('install', function(e){
   e.waitUntil(
-    caches.open(CACHE)
-      .then(c => c.addAll(ASSETS))
-      .catch(() => null)
-      .then(() => self.skipWaiting())
+    caches.open(VER).then(function(c){
+      /* satu berkas gagal tidak boleh menggagalkan pemasangan */
+      return Promise.all(SHELL.map(function(u){
+        return c.add(u).catch(function(){});
+      }));
+    }).then(function(){ return self.skipWaiting(); })
   );
 });
 
-self.addEventListener('activate', e => {
+self.addEventListener('activate', function(e){
   e.waitUntil(
-    caches.keys()
-      .then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches.keys().then(function(k){
+      return Promise.all(k.map(function(n){ return n===VER ? null : caches.delete(n); }));
+    }).then(function(){ return self.clients.claim(); })
   );
 });
 
-/* Yang harus selalu segar: halaman itu sendiri dan berkas pengaturannya. */
-function selaluSegar(url, req) {
-  if (req.mode === 'navigate') return true;
-  return /\.(html|webmanifest|json)$/i.test(url.pathname) || url.pathname.endsWith('/');
-}
+self.addEventListener('fetch', function(e){
+  var req = e.request;
+  if(req.method !== 'GET') return;
 
-self.addEventListener('fetch', e => {
-  const req = e.request;
-  if (req.method !== 'GET') return;
+  var url = new URL(req.url);
 
-  let url;
-  try { url = new URL(req.url); } catch (_) { return; }
-  if (url.origin !== location.origin) return;
-
-  if (selaluSegar(url, req)) {
-    e.respondWith(
-      fetch(req)
-        .then(res => {
-          if (res && res.ok) {
-            const salinan = res.clone();
-            caches.open(CACHE).then(c => c.put(req, salinan));
-          }
-          return res;
-        })
-        .catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
-    );
+  /* Data spreadsheet Google: selalu ambil dari jaringan, jangan pernah disimpan.
+     Kalau gagal, aplikasi sudah punya simpanannya sendiri di localStorage. */
+  if(url.hostname.indexOf('google.com') >= 0 || url.hostname.indexOf('googleusercontent.com') >= 0){
     return;
   }
 
-  e.respondWith(
-    caches.match(req).then(hit => hit || fetch(req).then(res => {
-      if (res && res.ok) {
-        const salinan = res.clone();
-        caches.open(CACHE).then(c => c.put(req, salinan));
-      }
-      return res;
-    }))
-  );
-});
-
-self.addEventListener('message', e => {
-  if (e.data === 'perbarui') self.skipWaiting();
+  /* Kerangka aplikasi: pakai simpanan dulu supaya cepat, sambil disegarkan di latar. */
+  if(url.origin === location.origin){
+    e.respondWith(
+      caches.match(req).then(function(hit){
+        var net = fetch(req).then(function(res){
+          if(res && res.status === 200){
+            var copy = res.clone();
+            caches.open(VER).then(function(c){ c.put(req, copy); });
+          }
+          return res;
+        }).catch(function(){ return hit; });
+        return hit || net;
+      })
+    );
+  }
 });
