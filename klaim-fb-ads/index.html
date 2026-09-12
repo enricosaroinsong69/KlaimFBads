@@ -694,10 +694,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--navy2);outline:none;b
 <!-- ═══════ DATA ═══════ -->
 <section class="panel" id="p-set">
   <div class="card">
-    <h2>Backup sesi ke ZIP</h2>
+    <h2>Backup foto ke ZIP</h2>
     <div class="cb">
-      <p class="hint">Berisi berkas asli semua foto yang diunggah, dikelompokkan dalam folder per salesman. Berkas siap cetak dan laporan tidak ikut disertakan. Nama berkasnya mengikuti nama activity.</p>
-      <button class="btn pri block" id="zipBtn">Unduh backup ZIP</button>
+      <p class="hint">Berisi berkas asli semua foto yang diunggah, dikelompokkan dalam folder per salesman. Berkas siap cetak dan laporan tidak ikut disertakan. Nama berkasnya mengikuti nama activity. Setelah dibuat, ZIP langsung dibuka di daftar aplikasi — bisa dikirim ke WhatsApp, email, Drive, atau disimpan ke berkas.</p>
+      <button class="btn pri block" id="zipBtn">Bagikan backup ZIP</button>
       <p class="hint" style="margin:10px 0 0" id="zipInfo"></p>
     </div>
   </div>
@@ -2134,16 +2134,25 @@ $('#zipBtn').onclick=function(){
 
     if(!n){
       toast('Belum ada foto yang diunggah');
-      btn.textContent='Unduh backup ZIP'; btn.disabled=false;
+      btn.textContent='Bagikan backup ZIP'; btn.disabled=false;
       return;
     }
 
     var blob=makeZip(files);
-    unduh(bersihNama(namaActivity())+'.zip', blob);
+    var nama=bersihNama(namaActivity())+'.zip';
     $('#zipInfo').textContent='Backup terakhir: '+n+' foto, '+Math.round(blob.size/1024)+' KB.';
-    toast(n+' foto tersimpan di ZIP');
+    /* Langsung diarahkan ke daftar aplikasi. Kalau perangkat tidak mendukung
+       berbagi berkas, kirimBerkas() otomatis mengunduhnya saja. */
+    kirimBerkas(nama, 'application/zip', blob, namaActivity())
+      .catch(function(e){
+        if(e && e.name==='AbortError') return;
+        unduh(nama, blob);
+        toast('Tidak bisa dibagikan — ZIP diunduh saja');
+      })
+      .then(function(){ btn.textContent='Bagikan backup ZIP'; btn.disabled=false; });
+    return;
   }catch(e){ toast('Backup gagal dibuat'); }
-  btn.textContent='Unduh backup ZIP'; btn.disabled=false;
+  btn.textContent='Bagikan backup ZIP'; btn.disabled=false;
 };
 
 /* ═════ Cadangan JSON ═════ */
